@@ -84,6 +84,11 @@ void Main() {
 
 bool Keyrstatus = false;
 bool WinLock = false;
+uint16_t lastTouch = 0;
+HWKeyboard::KeyCode_t lastVolumnTouch = HWKeyboard::RESERVED;
+bool TpLock = false;
+uint16_t loop = 0;
+uint16_t lastLoop = 0;
 
 /* Event Callbacks -----------------------------------------------------------*/
 extern "C" void OnTimerCallback() // 1000Hz callback
@@ -228,6 +233,13 @@ extern "C" void OnTimerCallback() // 1000Hz callback
                 Keyrstatus = true;
             }
             keyboard.Release(HWKeyboard::LEFT_GUI);
+        } else if (keyboard.KeyPressed(HWKeyboard::F8)) {
+            if (!Keyrstatus) {
+                TpLock = !TpLock;
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::F8);
+
         } else if (keyboard.KeyPressed(HWKeyboard::VOLUME_UP)) {
             if (!Keyrstatus) {
                 keyboard.MediaPress(HWKeyboard::VOLUME_UP);
@@ -316,6 +328,59 @@ extern "C" void OnTimerCallback() // 1000Hz callback
     }
     if (keyboard.KeyPressed(HWKeyboard::LEFT_GUI) && WinLock) {
         keyboard.Release(HWKeyboard::LEFT_GUI);
+    }
+    if (TpLock) {
+        loop++;
+        uint16_t thisTouch = 0;
+        if (keyboard.GetTouchBarState(1)) {
+            thisTouch = 1;
+            RGBLED.SetRgbBufferByID(7, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
+            keyboard.Press(HWKeyboard::NUM_1);
+        }
+        if (keyboard.GetTouchBarState(2)) {
+            thisTouch = 2;
+            RGBLED.SetRgbBufferByID(8, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
+            keyboard.Press(HWKeyboard::NUM_2);
+        }
+        if (keyboard.GetTouchBarState(3)) {
+            thisTouch = 3;
+            RGBLED.SetRgbBufferByID(9, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
+            keyboard.Press(HWKeyboard::NUM_3);
+        }
+        if (keyboard.GetTouchBarState(4)) {
+            thisTouch = 4;
+            RGBLED.SetRgbBufferByID(10, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
+            keyboard.Press(HWKeyboard::NUM_4);
+        }
+        if (keyboard.GetTouchBarState(5)) {
+            thisTouch = 5;
+            RGBLED.SetRgbBufferByID(11, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
+            keyboard.Press(HWKeyboard::NUM_5);
+        }
+        if (keyboard.GetTouchBarState(6)) {
+            thisTouch = 6;
+            RGBLED.SetRgbBufferByID(12, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
+            keyboard.Press(HWKeyboard::NUM_6);
+        }
+        if (lastTouch != 0) {
+            uint16_t diff = thisTouch - lastTouch;
+            if (diff > 0 && loop - lastLoop < 10) {
+                for (int i = 0; i < diff * 2; ++i) {
+                    keyboard.Press(HWKeyboard::NUM_7);
+//                    keyboard.MediaPress(HWKeyboard::VOLUME_UP);
+                }
+            } else if (diff < 0 && loop - lastLoop < 10) {
+                for (int i = 0; i < -diff * 2; ++i) {
+                    keyboard.Press(HWKeyboard::NUM_8);
+//                    keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
+                }
+            }else{}
+            if (diff != 0) {
+                lastLoop = loop;
+                keyboard.Press(HWKeyboard::NUM_9);
+            }
+        }
+        lastTouch = thisTouch;
     }
     if (keyboard.KeyDelayCnt) {
         keyboard.KeyDelayCnt--;
