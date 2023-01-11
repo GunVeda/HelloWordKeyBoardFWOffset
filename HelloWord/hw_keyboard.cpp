@@ -206,10 +206,24 @@ void HWKeyboard::MediaPress(HWKeyboard::KeyCode_t _key) {
             break;
         case MUTE:
             MediaDelaycnt = 10;
-            hidBuffer[RAW_REPORT_SIZE + 1] = 0x20;
+            hidBuffer[RAW_REPORT_SIZE + 1] = 0x10;
             USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS,
                                        GetHidReportBuffer(3),
                                        HWKeyboard::MEDIA_REPORT_SIZE);
+            break;
+        case APPLICATION:
+            break;
+        case WWW_HOME:
+            break;
+        case MAIL:
+            break;
+        case MEDIA_SELECT:
+            break;
+        case SCAN_PREVIOUS_TRACK:
+            break;
+        case SCAN_NEXT_TRACK:
+            break;
+        case PLAY_PAUSE:
             break;
         default:
 

@@ -248,63 +248,63 @@ extern "C" void OnTimerCallback() // 1000Hz callback
                 Keyrstatus = true;
             }
             keyboard.Release(HWKeyboard::MUTE);
-//
-//        } else if (keyboard.KeyPressed(HWKeyboard::APPLICATION)) {
-//            if (!Keyrstatus) {
-//                keyboard.MediaPress(HWKeyboard::APPLICATION);
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::APPLICATION);
-//
-//        } else if (keyboard.KeyPressed(HWKeyboard::WWW_HOME)) {
-//            if (!Keyrstatus) {
-//                keyboard.MediaPress(HWKeyboard::WWW_HOME);
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::WWW_HOME);
-//
-//        } else if (keyboard.KeyPressed(HWKeyboard::MAIL)) {
-//            if (!Keyrstatus) {
-//                keyboard.MediaPress(HWKeyboard::MAIL);
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::MAIL);
-//
-//        } else if (keyboard.KeyPressed(HWKeyboard::MEDIA_SELECT)) {
-//            if (!Keyrstatus) {
-//                keyboard.MediaPress(HWKeyboard::MEDIA_SELECT);
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::MEDIA_SELECT);
-//
-//        } else if (keyboard.KeyPressed(HWKeyboard::SCAN_PREVIOUS_TRACK)) {
-//            if (!Keyrstatus) {
-//                keyboard.MediaPress(HWKeyboard::SCAN_PREVIOUS_TRACK);
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::SCAN_PREVIOUS_TRACK);
-//
-//        } else if (keyboard.KeyPressed(HWKeyboard::SCAN_NEXT_TRACK)) {
-//            if (!Keyrstatus) {
-//                keyboard.MediaPress(HWKeyboard::SCAN_NEXT_TRACK);
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::SCAN_NEXT_TRACK);
-//
-//        } else if (keyboard.KeyPressed(HWKeyboard::PLAY_PAUSE)) {
-//            if (!Keyrstatus) {
-//                keyboard.MediaPress(HWKeyboard::PLAY_PAUSE);
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::PLAY_PAUSE);
-//
-//        } else if (keyboard.KeyPressed(HWKeyboard::CALCULATOR)) {
-//            if (!Keyrstatus) {
-//                keyboard.MediaPress(HWKeyboard::CALCULATOR);
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::CALCULATOR);
-//
+
+        } else if (keyboard.KeyPressed(HWKeyboard::APPLICATION)) {
+            if (!Keyrstatus) {
+                keyboard.MediaPress(HWKeyboard::APPLICATION);
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::APPLICATION);
+
+        } else if (keyboard.KeyPressed(HWKeyboard::WWW_HOME)) {
+            if (!Keyrstatus) {
+                keyboard.MediaPress(HWKeyboard::WWW_HOME);
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::WWW_HOME);
+
+        } else if (keyboard.KeyPressed(HWKeyboard::MAIL)) {
+            if (!Keyrstatus) {
+                keyboard.MediaPress(HWKeyboard::MAIL);
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::MAIL);
+
+        } else if (keyboard.KeyPressed(HWKeyboard::MEDIA_SELECT)) {
+            if (!Keyrstatus) {
+                keyboard.MediaPress(HWKeyboard::MEDIA_SELECT);
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::MEDIA_SELECT);
+
+        } else if (keyboard.KeyPressed(HWKeyboard::SCAN_PREVIOUS_TRACK)) {
+            if (!Keyrstatus) {
+                keyboard.MediaPress(HWKeyboard::SCAN_PREVIOUS_TRACK);
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::SCAN_PREVIOUS_TRACK);
+
+        } else if (keyboard.KeyPressed(HWKeyboard::SCAN_NEXT_TRACK)) {
+            if (!Keyrstatus) {
+                keyboard.MediaPress(HWKeyboard::SCAN_NEXT_TRACK);
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::SCAN_NEXT_TRACK);
+
+        } else if (keyboard.KeyPressed(HWKeyboard::PLAY_PAUSE)) {
+            if (!Keyrstatus) {
+                keyboard.MediaPress(HWKeyboard::PLAY_PAUSE);
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::PLAY_PAUSE);
+
+        } else if (keyboard.KeyPressed(HWKeyboard::CALCULATOR)) {
+            if (!Keyrstatus) {
+                keyboard.MediaPress(HWKeyboard::CALCULATOR);
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::CALCULATOR);
+
         } else {
             keyboard.MediaRelease();
             Keyrstatus = false;
