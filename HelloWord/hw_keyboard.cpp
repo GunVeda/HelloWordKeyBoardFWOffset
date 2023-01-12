@@ -205,12 +205,27 @@ void HWKeyboard::MediaPress(HWKeyboard::KeyCode_t _key) {
         case PLAY_PAUSE:
             hidBuffer[RAW_REPORT_SIZE + 2] = 0x04;
             break;
-        case APPLICATION:
-        case WWW_HOME:
-        case MAIL:
-        case MEDIA_SELECT:
         case SCAN_PREVIOUS_TRACK:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x0B;
+            break;
         case SCAN_NEXT_TRACK:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x0A;
+            break;
+        case APPLICATION:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x08;
+            break;
+        case WWW_HOME:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x06;
+            break;
+        case CALCULATOR:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x07;
+            break;
+        case MAIL:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x09;
+            break;
+        case MEDIA_SELECT:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x05;
+            break;
         default:
             flag = false;
             break;
