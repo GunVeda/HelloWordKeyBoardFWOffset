@@ -201,9 +201,7 @@ extern "C" void OnTimerCallback() // 1000Hz callback
 
         } else if (keyboard.KeyPressed(HWKeyboard::EQUAL)) {
             if (!Keyrstatus) {
-                if (config.FilterTime < 100) {
-                    config.FilterTime = 100;
-                } else {
+                if (config.FilterTime < 600) {
                     config.FilterTime += 100;
                 }
                 switch (config.FilterTime) {
@@ -219,8 +217,13 @@ extern "C" void OnTimerCallback() // 1000Hz callback
                     case 400:
                         RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 213, 18, 232});
                         break;
+                    case 500:
+                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 122, 214, 232});
+                        break;
+                    case 600:
+                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 232, 124, 178});
+                        break;
                     default:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 200, 200, 200});
                         break;
                 }
                 keyboard.isEepPush = true;
@@ -231,8 +234,6 @@ extern "C" void OnTimerCallback() // 1000Hz callback
             if (!Keyrstatus) {
                 if (config.FilterTime > 100) {
                     config.FilterTime -= 100;
-                } else {
-                    config.FilterTime -= 10;
                 }
                 switch (config.FilterTime) {
                     case 100:
@@ -247,8 +248,13 @@ extern "C" void OnTimerCallback() // 1000Hz callback
                     case 400:
                         RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 213, 18, 232});
                         break;
+                    case 500:
+                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 122, 214, 232});
+                        break;
+                    case 600:
+                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 232, 124, 178});
+                        break;
                     default:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 200, 200, 200});
                         break;
                 }
                 keyboard.isEepPush = true;

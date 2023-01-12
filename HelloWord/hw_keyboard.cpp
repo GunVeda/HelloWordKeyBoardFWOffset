@@ -189,47 +189,37 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 
 void HWKeyboard::MediaPress(HWKeyboard::KeyCode_t _key) {
     memcpy(LastHidBuffer + RAW_REPORT_SIZE, hidBuffer + RAW_REPORT_SIZE, MEDIA_REPORT_SIZE);
+    int16_t OldMediaDelaycnt = MediaDelaycnt;
+    MediaDelaycnt = 10;
+    bool flag = true;
     switch (_key) {
         case VOLUME_UP:
-            MediaDelaycnt = 10;
             hidBuffer[RAW_REPORT_SIZE + 1] = 0x40;
-            USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS,
-                                       GetHidReportBuffer(3),
-                                       HWKeyboard::MEDIA_REPORT_SIZE);
             break;
         case VOLUME_DOWN:
-            MediaDelaycnt = 10;
             hidBuffer[RAW_REPORT_SIZE + 1] = 0x80;
-            USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS,
-                                       GetHidReportBuffer(3),
-                                       HWKeyboard::MEDIA_REPORT_SIZE);
             break;
         case MUTE:
-            MediaDelaycnt = 10;
-            hidBuffer[RAW_REPORT_SIZE + 1] = 0x10;
-            USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS,
-                                       GetHidReportBuffer(3),
-                                       HWKeyboard::MEDIA_REPORT_SIZE);
-            break;
-        case APPLICATION:
-            break;
-        case WWW_HOME:
-            break;
-        case MAIL:
-            break;
-        case MEDIA_SELECT:
-            break;
-        case SCAN_PREVIOUS_TRACK:
-            break;
-        case SCAN_NEXT_TRACK:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x01;
             break;
         case PLAY_PAUSE:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x04;
             break;
+        case APPLICATION:
+        case WWW_HOME:
+        case MAIL:
+        case MEDIA_SELECT:
+        case SCAN_PREVIOUS_TRACK:
+        case SCAN_NEXT_TRACK:
         default:
-
+            flag = false;
             break;
     }
-
+    if (flag) {
+        USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS,
+                                   GetHidReportBuffer(3),
+                                   HWKeyboard::MEDIA_REPORT_SIZE);
+    }
     if (memcmp(LastHidBuffer + RAW_REPORT_SIZE + 1, hidBuffer + RAW_REPORT_SIZE + 1, MEDIA_REPORT_SIZE - 1) == 0) {
         isMediaReport = false;
     } else {
@@ -243,6 +233,8 @@ void HWKeyboard::MediaRelease(void) {
     if (MediaDelaycnt) {
         MediaDelaycnt--;
         hidBuffer[RAW_REPORT_SIZE + 1] = 0x00;
+        hidBuffer[RAW_REPORT_SIZE + 2] = 0x00;
+        hidBuffer[RAW_REPORT_SIZE + 3] = 0x00;
         USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS,
                                    GetHidReportBuffer(3),
                                    HWKeyboard::MEDIA_REPORT_SIZE);
