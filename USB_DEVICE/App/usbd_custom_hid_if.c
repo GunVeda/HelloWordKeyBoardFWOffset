@@ -200,8 +200,10 @@ __ALIGN_BEGIN static uint8_t CUSTOM_HID_ReportDesc_FS[USBD_CUSTOM_HID_REPORT_DES
                 0x81, 0x02,   //   Input (Data, Var,Abs)
                 //定义12个按键
                 0x09, 0xE2,   //   Usage (Mute)
-                0x09, 0x30,   //   Usage (Power)
-                0x09, 0x40,   //   Usage (Menu)
+//                0x09, 0x30,   //   Usage (Power)
+                0x09, 0x6F,   //   Usage (SYS_BRIGHTNESS_UP)
+//                0x09, 0x40,   //   Usage (Menu)
+                0x09, 0x70,   //   Usage (SYS_BRIGHTNESS_DOWN)
 //                0x09, 0xB1,   //   Usage (Pause)
                 0x09, 0xCD,   //   Usage (Play/Pause)
 //                0x09, 0xB2,   //   Usage (Record)

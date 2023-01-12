@@ -226,6 +226,15 @@ void HWKeyboard::MediaPress(HWKeyboard::KeyCode_t _key) {
         case MEDIA_SELECT:
             hidBuffer[RAW_REPORT_SIZE + 2] = 0x05;
             break;
+        case STOP:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x0C;
+            break;
+        case SYS_BRI_UP:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x02;
+            break;
+        case SYS_BRI_DOWN:
+            hidBuffer[RAW_REPORT_SIZE + 2] = 0x03;
+            break;
         default:
             flag = false;
             break;

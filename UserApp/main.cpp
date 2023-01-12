@@ -38,16 +38,16 @@ void Main() {
         config.KeyboardBrightness = 0.7;
         eeprom.Push(0, config);
     }
-    if (config.FilterTime < 100) {
+    if (config.FilterTime < 100 || config.FilterTime > 600) {
         config.FilterTime = 100;
-        eeprom.Push(0, config);
-    }
-    if (config.FilterTime > 400) {
-        config.FilterTime = 400;
         eeprom.Push(0, config);
     }
     if (config.TouchEndable > 1) {
         config.TouchEndable = 0;
+        eeprom.Push(0, config);
+    }
+    if (config.TouchVolumeEnable > 1) {
+        config.TouchVolumeEnable = 0;
         eeprom.Push(0, config);
     }
     if (config.RGBLEDMode >= HWKeyboard_RGBLED::ModeTypeMax) {
@@ -88,12 +88,6 @@ void Main() {
 
 bool Keyrstatus = false;
 bool WinLock = false;
-uint16_t lastTouch = 0;
-HWKeyboard::KeyCode_t lastVolumnTouch = HWKeyboard::RESERVED;
-bool TpLock = false;
-uint16_t loop = 0;
-uint16_t lastLoop = 0;
-uint16_t loopAbs = 10;
 
 /* Event Callbacks -----------------------------------------------------------*/
 extern "C" void OnTimerCallback() // 1000Hz callback
@@ -101,14 +95,6 @@ extern "C" void OnTimerCallback() // 1000Hz callback
     keyboard.ScanKeyStates();  // Around 40us use 4MHz SPI clk
     keyboard.ApplyDebounceFilter(config.FilterTime);
     keyboard.Remap(keyboard.FnPressed() ? 2 : 1);  // When Fn pressed use layer-2
-/*
-    if (keyboard.KeyPressed(HWKeyboard::LEFT_CTRL) &&
-        keyboard.KeyPressed(HWKeyboard::A))
-    {
-        // do something...
-     //   keyboard.Press(HWKeyboard::DELETE);
-    }
-*/
     if (keyboard.FnPressed()) {
         keyboard.isFNPress = true;
         if (keyboard.KeyPressed(HWKeyboard::UP_ARROW)) {
@@ -261,68 +247,30 @@ extern "C" void OnTimerCallback() // 1000Hz callback
                 Keyrstatus = true;
             }
             keyboard.Release(HWKeyboard::MINUS);
-        } else if (keyboard.KeyPressed(HWKeyboard::PERIOD)) {
+        } else if (keyboard.KeyPressed(HWKeyboard::RIGHT_U_BRACE)) {
             if (!Keyrstatus) {
-                if (loopAbs < 100) {
-                    loopAbs += 10;
-                }
+                keyboard.MediaPress(HWKeyboard::SYS_BRI_DOWN);
                 Keyrstatus = true;
             }
-            keyboard.Release(HWKeyboard::PERIOD);
-        } else if (keyboard.KeyPressed(HWKeyboard::COMMA)) {
+            keyboard.Release(HWKeyboard::RIGHT_U_BRACE);
+        } else if (keyboard.KeyPressed(HWKeyboard::LEFT_U_BRACE)) {
             if (!Keyrstatus) {
-                if (loopAbs > 10) {
-                    loopAbs -= 10;
-                }
+                keyboard.MediaPress(HWKeyboard::SYS_BRI_UP);
                 Keyrstatus = true;
             }
-            keyboard.Release(HWKeyboard::COMMA);
-//        } else if (keyboard.KeyPressed(HWKeyboard::NUM_1)) {
-//            if (!Keyrstatus) {
-//                config.FilterTime = 100;
-//                RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 187, 167, 16});
-//                keyboard.isEepPush = true;
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::NUM_1);
-//        } else if (keyboard.KeyPressed(HWKeyboard::NUM_2)) {
-//            if (!Keyrstatus) {
-//                config.FilterTime = 200;
-//                RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 72, 200, 224});
-//                keyboard.isEepPush = true;
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::NUM_2);
-//        } else if (keyboard.KeyPressed(HWKeyboard::NUM_3)) {
-//            if (!Keyrstatus) {
-//                config.FilterTime = 300;
-//                RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 45, 23, 222});
-//                keyboard.isEepPush = true;
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::NUM_3);
-//
-//        } else if (keyboard.KeyPressed(HWKeyboard::NUM_4)) {
-//            if (!Keyrstatus) {
-//                config.FilterTime = 400;
-//                RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 213, 18, 232});
-//                keyboard.isEepPush = true;
-//                Keyrstatus = true;
-//            }
-//            keyboard.Release(HWKeyboard::NUM_4);
+            keyboard.Release(HWKeyboard::LEFT_U_BRACE);
         } else if (keyboard.KeyPressed(HWKeyboard::LEFT_GUI)) {
             if (!Keyrstatus) {
                 WinLock = !WinLock;
                 Keyrstatus = true;
             }
             keyboard.Release(HWKeyboard::LEFT_GUI);
-        } else if (keyboard.KeyPressed(HWKeyboard::F8)) {
+        } else if (keyboard.KeyPressed(HWKeyboard::ESC)) {
             if (!Keyrstatus) {
-//                TpLock = !TpLock;
                 keyboard.TouchTestLED = !keyboard.TouchTestLED;
                 Keyrstatus = true;
             }
-            keyboard.Release(HWKeyboard::F8);
+            keyboard.Release(HWKeyboard::ESC);
 
         } else if (keyboard.KeyPressed(HWKeyboard::VOLUME_UP)) {
             if (!Keyrstatus) {
@@ -394,6 +342,13 @@ extern "C" void OnTimerCallback() // 1000Hz callback
             }
             keyboard.Release(HWKeyboard::PLAY_PAUSE);
 
+        } else if (keyboard.KeyPressed(HWKeyboard::STOP)) {
+            if (!Keyrstatus) {
+                keyboard.MediaPress(HWKeyboard::STOP);
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::STOP);
+
         } else if (keyboard.KeyPressed(HWKeyboard::CALCULATOR)) {
             if (!Keyrstatus) {
                 keyboard.MediaPress(HWKeyboard::CALCULATOR);
@@ -413,60 +368,6 @@ extern "C" void OnTimerCallback() // 1000Hz callback
     if (keyboard.KeyPressed(HWKeyboard::LEFT_GUI) && WinLock) {
         keyboard.Release(HWKeyboard::LEFT_GUI);
     }
-//    if (TpLock) {
-//        loop++;
-//        uint16_t thisTouch = 0;
-//        if (keyboard.GetTouchBarState(1)) {
-//            thisTouch = 1;
-//            RGBLED.SetRgbBufferByID(7, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
-//            keyboard.Press(HWKeyboard::NUM_1);
-//        }
-//        if (keyboard.GetTouchBarState(2)) {
-//            thisTouch = 2;
-//            RGBLED.SetRgbBufferByID(8, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
-//            keyboard.Press(HWKeyboard::NUM_2);
-//        }
-//        if (keyboard.GetTouchBarState(3)) {
-//            thisTouch = 3;
-//            RGBLED.SetRgbBufferByID(9, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
-//            keyboard.Press(HWKeyboard::NUM_3);
-//        }
-//        if (keyboard.GetTouchBarState(4)) {
-//            thisTouch = 4;
-//            RGBLED.SetRgbBufferByID(10, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
-//            keyboard.Press(HWKeyboard::NUM_4);
-//        }
-//        if (keyboard.GetTouchBarState(5)) {
-//            thisTouch = 5;
-//            RGBLED.SetRgbBufferByID(11, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
-//            keyboard.Press(HWKeyboard::NUM_5);
-//        }
-//        if (keyboard.GetTouchBarState(6)) {
-//            thisTouch = 6;
-//            RGBLED.SetRgbBufferByID(12, HWKeyboard_RGBLED::Color_t{(uint8_t) 0, 0, 255}, 1);
-//            keyboard.Press(HWKeyboard::NUM_6);
-//        }
-//        if (lastTouch != 0) {
-//            bool up = false;
-//            uint16_t diff;
-//            if (thisTouch > lastTouch) {
-//                up = true;
-//                diff = thisTouch - lastTouch;
-//            } else if (thisTouch < lastTouch) {
-//                diff = lastTouch - thisTouch;
-//            } else {}
-//            if (up && loop - lastLoop < loopAbs) {
-//                for (int i = 0; i < diff * 2; ++i) {
-//                    keyboard.MediaPress(HWKeyboard::VOLUME_UP);
-//                }
-//            } else if ((!up) && loop - lastLoop < loopAbs) {
-//                for (int i = 0; i < diff * 2; ++i) {
-//                    keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
-//                }
-//            } else {}
-//        }
-//        lastTouch = thisTouch;
-//    }
     if (keyboard.KeyDelayCnt) {
         keyboard.KeyDelayCnt--;
         USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS,
