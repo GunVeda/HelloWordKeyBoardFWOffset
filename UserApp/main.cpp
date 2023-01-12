@@ -204,10 +204,10 @@ extern "C" void OnTimerCallback() // 1000Hz callback
                         RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 213, 18, 232});
                         break;
                     case 500:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 122, 214, 232});
+                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 147, 112, 219});
                         break;
                     case 600:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 232, 124, 178});
+                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 255, 0, 255});
                         break;
                     default:
                         break;
