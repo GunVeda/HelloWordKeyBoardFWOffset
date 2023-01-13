@@ -255,13 +255,13 @@ extern "C" void OnTimerCallback() // 1000Hz callback
             keyboard.Release(HWKeyboard::MINUS);
         } else if (keyboard.KeyPressed(HWKeyboard::RIGHT_U_BRACE)) {
             if (!Keyrstatus) {
-                keyboard.MediaPress(HWKeyboard::SYS_BRI_DOWN);
+                keyboard.MediaPress(HWKeyboard::SYS_BRI_UP);
                 Keyrstatus = true;
             }
             keyboard.Release(HWKeyboard::RIGHT_U_BRACE);
         } else if (keyboard.KeyPressed(HWKeyboard::LEFT_U_BRACE)) {
             if (!Keyrstatus) {
-                keyboard.MediaPress(HWKeyboard::SYS_BRI_UP);
+                keyboard.MediaPress(HWKeyboard::SYS_BRI_DOWN);
                 Keyrstatus = true;
             }
             keyboard.Release(HWKeyboard::LEFT_U_BRACE);
