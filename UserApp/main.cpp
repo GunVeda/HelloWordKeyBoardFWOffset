@@ -12,6 +12,8 @@ HWKeyboard_RGBLED RGBLED;
 EEPROM eeprom;
 
 
+void UpdateFNColor();
+
 /* Main Entry ----------------------------------------------------------------*/
 void Main() {
     eeprom.Pull(0, config);
@@ -42,6 +44,7 @@ void Main() {
         config.FilterTime = 100;
         eeprom.Push(0, config);
     }
+    UpdateFNColor();
     if (config.TouchEndable > 1) {
         config.TouchEndable = 0;
         eeprom.Push(0, config);
@@ -96,6 +99,8 @@ uint16_t lastLoop = 0;
 uint16_t loopAbs = 10;
 
 /* Event Callbacks -----------------------------------------------------------*/
+void UpdateFNColor();
+
 extern "C" void OnTimerCallback() // 1000Hz callback
 {
     keyboard.ScanKeyStates();  // Around 40us use 4MHz SPI clk
@@ -196,28 +201,7 @@ extern "C" void OnTimerCallback() // 1000Hz callback
                 if (config.FilterTime < 600) {
                     config.FilterTime += 100;
                 }
-                switch (config.FilterTime) {
-                    case 100:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 187, 167, 16});
-                        break;
-                    case 200:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 72, 200, 224});
-                        break;
-                    case 300:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 45, 23, 222});
-                        break;
-                    case 400:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 213, 18, 232});
-                        break;
-                    case 500:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 147, 112, 219});
-                        break;
-                    case 600:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 255, 0, 255});
-                        break;
-                    default:
-                        break;
-                }
+                UpdateFNColor();
                 keyboard.isEepPush = true;
                 Keyrstatus = true;
             }
@@ -227,28 +211,7 @@ extern "C" void OnTimerCallback() // 1000Hz callback
                 if (config.FilterTime > 100) {
                     config.FilterTime -= 100;
                 }
-                switch (config.FilterTime) {
-                    case 100:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 187, 167, 16});
-                        break;
-                    case 200:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 72, 200, 224});
-                        break;
-                    case 300:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 45, 23, 222});
-                        break;
-                    case 400:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 213, 18, 232});
-                        break;
-                    case 500:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 122, 214, 232});
-                        break;
-                    case 600:
-                        RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 232, 124, 178});
-                        break;
-                    default:
-                        break;
-                }
+                UpdateFNColor();
                 keyboard.isEepPush = true;
                 Keyrstatus = true;
             }
@@ -454,6 +417,7 @@ extern "C" void OnTimerCallback() // 1000Hz callback
 
 }
 
+
 extern "C"
 void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi) {
     RGBLED.isRgbTxBusy = false;
@@ -466,4 +430,29 @@ void HID_RxCpltCallback(uint8_t *_data) {
     RGBLED.isScrlkLocked = _data[1] & 0x04 ? true : false;
     RGBLED.isComposeLocked = _data[1] & 0x08 ? true : false;
     RGBLED.isKanaLocked = _data[1] & 0x10 ? true : false;
+}
+
+void UpdateFNColor() {
+    switch (config.FilterTime) {
+        case 100:
+            RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 187, 167, 16});
+            break;
+        case 200:
+            RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 72, 200, 224});
+            break;
+        case 300:
+            RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 45, 23, 222});
+            break;
+        case 400:
+            RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 213, 18, 232});
+            break;
+        case 500:
+            RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 147, 112, 219});
+            break;
+        case 600:
+            RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 255, 0, 255});
+            break;
+        default:
+            break;
+    }
 }
