@@ -57,8 +57,25 @@ void Main() {
         config.RGBLEDMode = 0;
         eeprom.Push(0, config);
     }
+    if (config.LED_R > 254) {
+        config.LED_R = 242;
+        eeprom.Push(0, config);
+    }
+    if (config.LED_G > 254) {
+        config.LED_G = 157;
+        eeprom.Push(0, config);
+    }
+    if (config.LED_B > 254) {
+        config.LED_B = 0;
+        eeprom.Push(0, config);
+    }
     RGBLED.KeyboardBrightness = config.KeyboardBrightness;
-    config.LightON ? RGBLED.LightON = true : RGBLED.LightON = false;
+    if (config.LightON != 1) {
+        config.LightON = 1;
+        eeprom.Push(0, config);
+    }
+//    config.LightON ? RGBLED.LightON = true : RGBLED.LightON = false;
+    RGBLED.LightON = true;
     RGBLED.RGBMode = config.RGBLEDMode;
     // Keyboard Report Start
     HAL_TIM_Base_Start_IT(&htim4);
