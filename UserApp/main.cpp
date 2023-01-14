@@ -507,6 +507,9 @@ void KeymapModeSet() {
             keyboard.keyMap[1][71] = HWKeyboard::PAGE_DOWN;
             keyboard.keyMap[2][13] = HWKeyboard::INSERT;
             keyboard.keyMap[2][28] = HWKeyboard::PAD_NUM_LOCK;
+            keyboard.keyMap[2][43] = HWKeyboard::MUTE;
+            keyboard.keyMap[2][57] = HWKeyboard::PAGE_UP;
+            keyboard.keyMap[2][71] = HWKeyboard::PAGE_DOWN;
             break;
         case 1:
             keyboard.keyMap[1][13] = HWKeyboard::PRINT;
@@ -517,6 +520,8 @@ void KeymapModeSet() {
             keyboard.keyMap[2][13] = HWKeyboard::PAUSE;
             keyboard.keyMap[2][57] = HWKeyboard::PAGE_UP;
             keyboard.keyMap[2][71] = HWKeyboard::PAGE_DOWN;
+            keyboard.keyMap[2][28] = HWKeyboard::INSERT;
+            keyboard.keyMap[2][43] = HWKeyboard::DELETE;
             break;
     }
 }
