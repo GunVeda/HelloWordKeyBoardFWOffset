@@ -189,7 +189,10 @@ void HWKeyboard_RGBLED::RGBLED_ModeHandle(uint8_t mode) {
                     }
                 }
                 for (uint8_t i = 82; i < 85; i++) {
-                    SetRgbBufferByID(i, FNColor, 0);
+                    SetRgbBufferByID(i, MonochromeColor, 0);
+                }
+                for (uint8_t i = 85; i < 104; i++) {
+                    SetRgbBufferByID(i, FNColor, KeyboardBrightness);
                 }
                 break;
             case Marquee:
@@ -206,7 +209,10 @@ void HWKeyboard_RGBLED::RGBLED_ModeHandle(uint8_t mode) {
                     index++;
                 }
                 for (uint8_t i = 82; i < 85; i++) {
-                    SetRgbBufferByID(i, FNColor, 0);
+                    SetRgbBufferByID(i, MonochromeColor, 0);
+                }
+                for (uint8_t i = 85; i < 104; i++) {
+                    SetRgbBufferByID(i, FNColor, KeyboardBrightness);
                 }
 //                for (uint8_t i: auraBuffer) {
 //                    SetRgbBufferByID(i, FNColor, KeyboardBrightness);
