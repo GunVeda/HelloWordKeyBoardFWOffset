@@ -14,6 +14,8 @@ EEPROM eeprom;
 
 void UpdateFNColor();
 
+void KeymapModeSet();
+
 /* Main Entry ----------------------------------------------------------------*/
 void Main() {
     eeprom.Pull(0, config);
@@ -32,6 +34,7 @@ void Main() {
                 .LED_R = 242,
                 .LED_G = 157,
                 .LED_B = 0,
+                .KeymapMode = 0,
         };
         memset(config.keyMap, -1, 128);
         eeprom.Push(0, config);
@@ -69,6 +72,11 @@ void Main() {
         config.LED_B = 0;
         eeprom.Push(0, config);
     }
+    if (config.KeymapMode > 1) {
+        config.KeymapMode = 1;
+        eeprom.Push(0, config);
+    }
+    KeymapModeSet();
     RGBLED.KeyboardBrightness = config.KeyboardBrightness;
     if (config.LightON != 1) {
         config.LightON = 1;
@@ -359,6 +367,17 @@ extern "C" void OnTimerCallback() // 1000Hz callback
             }
             keyboard.Release(HWKeyboard::CALCULATOR);
 
+        } else if (keyboard.KeyPressed(HWKeyboard::TAB)) {
+            if (!Keyrstatus) {
+                config.KeymapMode++;
+                if (config.KeymapMode > 1) {
+                    config.KeymapMode = 0;
+                }
+                KeymapModeSet();
+                keyboard.isEepPush = true;
+                Keyrstatus = true;
+            }
+            keyboard.Release(HWKeyboard::TAB);
         } else {
             keyboard.MediaRelease();
             Keyrstatus = false;
@@ -447,6 +466,9 @@ void HID_RxCpltCallback(uint8_t *_data) {
     RGBLED.isScrlkLocked = _data[1] & 0x04 ? true : false;
     RGBLED.isComposeLocked = _data[1] & 0x08 ? true : false;
     RGBLED.isKanaLocked = _data[1] & 0x10 ? true : false;
+    for (int i = 0; i < sizeof(_data) / sizeof(_data[0]); ++i) {
+        RGBLED.SetAuraBuffer(_data[i], i);
+    }
 }
 
 void UpdateFNColor() {
@@ -470,6 +492,31 @@ void UpdateFNColor() {
             RGBLED.FNColorSet(HWKeyboard_RGBLED::Color_t{(uint8_t) 255, 0, 255});
             break;
         default:
+            break;
+    }
+}
+
+void KeymapModeSet() {
+    switch (config.KeymapMode) {
+        default:
+        case 0:
+            keyboard.keyMap[1][13] = HWKeyboard::DELETE;
+            keyboard.keyMap[1][28] = HWKeyboard::HOME;
+            keyboard.keyMap[1][43] = HWKeyboard::END;
+            keyboard.keyMap[1][57] = HWKeyboard::PAGE_UP;
+            keyboard.keyMap[1][71] = HWKeyboard::PAGE_DOWN;
+            keyboard.keyMap[2][13] = HWKeyboard::INSERT;
+            keyboard.keyMap[2][28] = HWKeyboard::PAD_NUM_LOCK;
+            break;
+        case 1:
+            keyboard.keyMap[1][13] = HWKeyboard::PRINT;
+            keyboard.keyMap[1][28] = HWKeyboard::INSERT;
+            keyboard.keyMap[1][43] = HWKeyboard::DELETE;
+            keyboard.keyMap[1][57] = HWKeyboard::HOME;
+            keyboard.keyMap[1][71] = HWKeyboard::END;
+            keyboard.keyMap[2][13] = HWKeyboard::PAUSE;
+            keyboard.keyMap[2][57] = HWKeyboard::PAGE_UP;
+            keyboard.keyMap[2][71] = HWKeyboard::PAGE_DOWN;
             break;
     }
 }

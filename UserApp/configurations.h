@@ -31,6 +31,7 @@ typedef struct KeyboardConfig_t
     uint8_t LED_R;
     uint8_t LED_G;
     uint8_t LED_B;
+    uint8_t KeymapMode;
 } KeyboardConfig_t;
 
 extern KeyboardConfig_t config;

@@ -183,15 +183,34 @@ void HWKeyboard_RGBLED::RGBLED_ModeHandle(uint8_t mode) {
             case Follow:
                 for (uint8_t i = 0; i < 82; i++) {
                     if (RGBLEDKeyBuf[i / 8] & (0x80 >> (i % 8))) {
-//                        SetRgbBufferByID(RGBLEDKeymap[i], Color_t{255, 255, 255}, KeyboardBrightness);
                         SetRgbBufferByID(RGBLEDKeymap[i], MonochromeColor, KeyboardBrightness);
                     } else {
                         SetRgbBufferByID(RGBLEDKeymap[i], Color_t{0, 0, 0}, 0);
                     }
                 }
                 for (uint8_t i = 82; i < 85; i++) {
-                    SetRgbBufferByID(i, Color_t{255, 255, 255}, 0);
+                    SetRgbBufferByID(i, FNColor, 0);
                 }
+                break;
+            case Marquee:
+                for (uint8_t i = 0; i < 82; i++) {
+                    SetRgbBufferByID(i, Color_t{0, 0, 0}, 0);
+                }
+                if (index > 81) {
+                    index = 0;
+                }
+                SetRgbBufferByID(RGBLEDKeymap[index], MonochromeColor, KeyboardBrightness);
+                wait++;
+                if (wait > 5) {
+                    wait = 0;
+                    index++;
+                }
+                for (uint8_t i = 82; i < 85; i++) {
+                    SetRgbBufferByID(i, FNColor, 0);
+                }
+//                for (uint8_t i: auraBuffer) {
+//                    SetRgbBufferByID(i, FNColor, KeyboardBrightness);
+//                }
                 break;
         }
     } else {
@@ -201,6 +220,9 @@ void HWKeyboard_RGBLED::RGBLED_ModeHandle(uint8_t mode) {
     }
 }
 
+void HWKeyboard_RGBLED::SetAuraBuffer(uint8_t buffer, uint16_t index) {
+    auraBuffer[index] = buffer;
+}
 
 void HWKeyboard_RGBLED::RGBLED_ctrl(HWKeyboard_RGBLED *rgb, uint8_t trigger, bool iswriteEep) {
     switch (trigger) {

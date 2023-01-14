@@ -1,6 +1,6 @@
 <!-- 1、切换灯效：-->
     Fn + SPACE
-    常亮（默认）->呼吸->稚晖君彩光呼吸灯->按键跟随->关闭
+    常亮（默认）->呼吸->稚晖君彩光呼吸灯->按键跟随->跑马灯->关闭
 
 <!-- 2、右下灯光（默认跟随其它灯的颜色）： -->
     Fn       蓝
@@ -21,10 +21,16 @@
     除 稚晖君彩光呼吸灯 以外模式均可调节，各模式颜色共享
 
 <!-- 6、功能区按键从上到下:  -->
-    PrintScreen -> Insert -> Delete -> Home -> End
-    PageUp : Fn + Home
-    PageDown : Fn + End
-    Pause : Fn + PrintScreen
+    按Fn+TAB切换模式
+    模式1：
+        Del → Home → End → Pageup → Pagedown
+        Insert: Fn + Del
+        NumLock：Fn + Home
+    模式2：
+        PrintScreen -> Insert -> Delete -> Home -> End
+        PageUp : Fn + Home
+        PageDown : Fn + End
+        Pause : Fn + PrintScreen
 
 <!-- 7、WinLock锁定功能： -->
     Fn + Win 后会屏蔽Win键按动,再按一遍就解除（存在bug，解除时可能会触发Win键）
@@ -39,7 +45,7 @@
     滤波500 (Fn → 中紫色)
     滤波600 (Fn → 紫红色)
 
-多媒体按键：
+多媒体按键(windows均可用,mac和linux部分可用)：
 - Fn+ESC:触控条测试
 - Fn+F1:我的电脑
 - Fn+F2:浏览器
