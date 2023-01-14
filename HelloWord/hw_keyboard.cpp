@@ -194,10 +194,10 @@ void HWKeyboard::MediaPress(HWKeyboard::KeyCode_t _key) {
     bool flag = true;
     switch (_key) {
         case VOLUME_UP:
-            hidBuffer[RAW_REPORT_SIZE + 1] = 0x80;
+            hidBuffer[RAW_REPORT_SIZE + 1] = 0x40;
             break;
         case VOLUME_DOWN:
-            hidBuffer[RAW_REPORT_SIZE + 1] = 0x40;
+            hidBuffer[RAW_REPORT_SIZE + 1] = 0x80;
             break;
         case MUTE:
             hidBuffer[RAW_REPORT_SIZE + 2] = 0x01;
