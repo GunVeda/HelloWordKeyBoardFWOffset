@@ -121,7 +121,6 @@ HWKeyboard::KeyCode_t lastVolumnTouch = HWKeyboard::RESERVED;
 bool TpLock = false;
 uint16_t loop = 0;
 uint16_t lastLoop = 0;
-uint16_t loopAbs = 10;
 
 /* Event Callbacks -----------------------------------------------------------*/
 void UpdateFNColor();
@@ -257,28 +256,6 @@ extern "C" void OnTimerCallback() // 1000Hz callback
                 Keyrstatus = true;
             }
             keyboard.Release(HWKeyboard::LEFT_U_BRACE);
-        } else if (keyboard.KeyPressed(HWKeyboard::PERIOD)) {
-            if (!Keyrstatus) {
-                if (loopAbs < 100) {
-                    if (loopAbs < 10) {
-                        loopAbs += 1;
-                    } else {
-                        loopAbs += 10;
-                    }
-                }
-                Keyrstatus = true;
-            }
-            keyboard.Release(HWKeyboard::PERIOD);
-        } else if (keyboard.KeyPressed(HWKeyboard::COMMA)) {
-            if (!Keyrstatus) {
-                if (loopAbs > 10) {
-                    loopAbs -= 10;
-                } else if (loopAbs > 0) {
-                    loopAbs -= 1;
-                } else {}
-                Keyrstatus = true;
-            }
-            keyboard.Release(HWKeyboard::COMMA);
         } else if (keyboard.KeyPressed(HWKeyboard::LEFT_GUI)) {
             if (!Keyrstatus) {
                 WinLock = !WinLock;
@@ -288,7 +265,7 @@ extern "C" void OnTimerCallback() // 1000Hz callback
         } else if (keyboard.KeyPressed(HWKeyboard::ESC)) {
             if (!Keyrstatus) {
                 TpLock = !TpLock;
-                keyboard.TouchTestLED = !keyboard.TouchTestLED;
+//                keyboard.TouchTestLED = !keyboard.TouchTestLED;
                 Keyrstatus = true;
             }
             keyboard.Release(HWKeyboard::ESC);
@@ -421,29 +398,22 @@ extern "C" void OnTimerCallback() // 1000Hz callback
         if (keyboard.GetTouchBarState(6)) {
             thisTouch = 6;
         }
-        if (lastTouch != 0) {
-            if (loop - lastLoop < 2) {
-                bool up = false;
+        if (lastTouch != 0 && thisTouch != 0) {
+            if (loop - lastLoop < 5) {
                 uint8_t diff;
                 if (thisTouch > lastTouch) {
-                    RGBLED.SetRgbBufferByID(15, HWKeyboard_RGBLED::Color_t{(uint8_t) 255, 255, 255}, 1);
-                    up = true;
                     diff = thisTouch - lastTouch;
                     VolumeUp(diff);
                 } else if (thisTouch < lastTouch) {
-                    RGBLED.SetRgbBufferByID(17, HWKeyboard_RGBLED::Color_t{(uint8_t) 255, 255, 255}, 1);
                     diff = lastTouch - thisTouch;
                     VolumeDown(diff);
                 } else {}
             }
             lastLoop = loop;
-//            if (up && loop - lastLoop < loopAbs) {
-//                VolumeUp(diff);
-//            } else if ((!up) && loop - lastLoop < loopAbs) {
-//                VolumeDown(diff);
-//            } else {}
         }
-        lastTouch = thisTouch;
+        if (thisTouch != 0) {
+            lastTouch = thisTouch;
+        }
     }
     if (keyboard.KeyDelayCnt) {
         keyboard.KeyDelayCnt--;
@@ -459,18 +429,13 @@ void VolumeUp(uint8_t diff) {
         default:
         case 5:
             keyboard.MediaPress(HWKeyboard::VOLUME_UP);
-            keyboard.MediaPress(HWKeyboard::VOLUME_UP);
         case 4:
-            keyboard.MediaPress(HWKeyboard::VOLUME_UP);
             keyboard.MediaPress(HWKeyboard::VOLUME_UP);
         case 3:
             keyboard.MediaPress(HWKeyboard::VOLUME_UP);
-            keyboard.MediaPress(HWKeyboard::VOLUME_UP);
         case 2:
             keyboard.MediaPress(HWKeyboard::VOLUME_UP);
-            keyboard.MediaPress(HWKeyboard::VOLUME_UP);
         case 1:
-            keyboard.MediaPress(HWKeyboard::VOLUME_UP);
             keyboard.MediaPress(HWKeyboard::VOLUME_UP);
     }
 }
@@ -480,18 +445,13 @@ void VolumeDown(uint8_t diff) {
         default:
         case 5:
             keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
-            keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
         case 4:
-            keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
             keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
         case 3:
             keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
-            keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
         case 2:
             keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
-            keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
         case 1:
-            keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
             keyboard.MediaPress(HWKeyboard::VOLUME_DOWN);
     }
 }
